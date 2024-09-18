@@ -1,5 +1,5 @@
 # Gru: A Property-Based Test Refinement Tool
-Gru is a toolset for systematically and concretely refining property-based tests (PBTs) implemented in [Hypothesis](https://hypothesis.readthedocs.io/en/latest/) using mutation testing and large language models. It provides functionalities to tighten or generalize property-based tests  
+Gru is a toolset for systematically and concretely refining property-based tests (PBTs) implemented in [Hypothesis](https://hypothesis.readthedocs.io/en/latest/) using mutation testing and large language models. It provides functionalities to tighten or generalize property-based tests, allowing them to either more closely capture the behaviors of an implementation (tightening) or more loosely capture the behaviors of an implementation (generalization). 
 
 ![Gru lol](https://static.wikia.nocookie.net/despicableme/images/1/1c/Moonplan.png/revision/latest?cb=20130812133209)
 
