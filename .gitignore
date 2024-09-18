@@ -1,0 +1,174 @@
+__pycache__/
+*.py[cod]
+*$py.class
+
+*.so
+
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+.cache/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# pyenv
+.python-version
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# PyCharm / IDEs
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# VSCode
+.vscode/
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Spyder project settings
+.spyderproject
+.spyderworkspace
+
+# Rope project settings
+.ropeproject
+
+# MacOS
+.DS_Store
+
+# Thumbnails
+._*
+
+# MyPy
+.mypy_cache/
+
+# Profiling data
+.prof
+
+# Logs and debug files
+*.log
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.temp
+
+# Coverage reports
+.coverage
+
+# Compiled files
+*.o
+*.obj
+*.dll
+*.pyd
+
+# Cython debug symbols
+cython_debug/
+
+# Ignore virtual environment directories
+venv/
+ENV/
+
+# Ignore egg files and egg info directories
+*.egg
+*.egg-info/
+
+# Ignore build artifacts
+build/
+dist/
+
+# Ignore Python wheel files
+*.whl
+
+# Ignore pyc files
+*.pyc
+
+# Ignore __pycache__ directories
+__pycache__/
+
+# Ignore metadata files
+*.pyo
+
+# Ignore pytest cache
+.pytest_cache/
+
+# Ignore mutable data files
+*.sqlite3
+
+# Ignore test outputs
+test-results/
+
+# Ignore coverage reports
+htmlcov/
+
+# Ignore generated documentation
+docs/_build/
+
+# Ignore setuptools files
+*.eggs/
+
+# Ignore config files
+*.ini
+
+# Ignore example files
+examples/
+
+# Ignore secrets
+*.pem
+*.key
+*.crt
+
+# Ignore IPython history
+.history
+
+# Ignore SSH files
+.ssh/
+
+# Ignore environment variables files
+.env
