@@ -1,30 +1,54 @@
-import openai
 import os
+import re
+import requests 
 
-class OpenAIModel:
-    def __init__(self, model_name='gpt-4', api_key=None):
-        self.model_name = model_name
-        # Set the API key from the provided argument or environment variable
-        openai.api_key = api_key or os.getenv('OPENAI_API_KEY')
-        if not openai.api_key:
-            raise ValueError("OpenAI API key not provided. Set it via the 'api_key' argument or 'OPENAI_API_KEY' environment variable.")
+class ChatModel:
 
-    def generate_full(self, prompt):
-        response = openai.ChatCompletion.create(
-            model=self.model_name,
-            messages=[
-                {"role": "system", "content": "You are an assistant that writes code."},
-                {"role": "user", "content": prompt},
-            ],
-            max_tokens=500,
-            temperature=0.7,
-            n=1,
-            stop=None,
-        )
+    def __init__(self, system: str, temperature=0.3):
+        """Sets up the model with a system prompt and a temperature"""
+        
+        self.model = 'gpt-3.5-turbo'
+        self.apikey = os.getenv('OPENAI_KEY')
+        self.baseurl = "https://api.openai.com/v1/chat/completions"
+        self.system = system
+        self.temperature = temperature
+        self.abstract_base = "You are an AI assistant that writes Python code. "
+        self.messages = [{"role": "system", "content": self.system}]
 
-        # Extract the assistant's reply
-        completion = response['choices'][0]['message']['content'].strip()
-        return completion
+    def reset(self):
+        self.messages = [{"role": "system", "content": self.system}]
+
+    def generate_full(self, query: str) -> str:
+        
+        headers = {
+            'Authorization': f'Bearer {self.apikey}',
+            'Content-Type': 'application/json'
+        }
+        
+        base = self.abstract_base 
+        data = {
+            'model': self.model, 
+            'messages': [
+                {'role': 'user', 'content': base + "\n" + query}
+            ]
+        }            
+        
+        tries = 0
+        while tries < 5:
+            try:
+                response = requests.post(self.baseurl, headers=headers, json=data)
+                res = response.json()['choices'][0]['message']['content']
+                res = re.sub(r'[^\w\s,]', '', res)
+                return res
+            except:
+                tries += 1
+        raise Exception(f"Failed to get response after {tries} tries.")
 
 # Initialize the model
-model = OpenAIModel()
+model = ChatModel(system="", temperature=0.2)
+
+if __name__ == "__main__":
+    model = ChatModel(system="", temperature=0.2)
+    res1 = model.generate_full("""Find survey papers on Julia.""")
+    print(res1)
+    breakpoint()

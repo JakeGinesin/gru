@@ -1,11 +1,12 @@
 from typing import Set
+import ast, astor
 
 if __name__ == '__main__':
     from mutator import mutate_ast
 else:
     from gru.mutator.mutator import mutate_ast
 
-def mutate_map(code : str, num_mutants : int, num_layers : int) -> Set[str]:
+def mutate_map(code : str, num_mutants : int, depth : int) -> Set[str]:
     """
     takes some python code and returns a set of mutants
 
@@ -22,7 +23,7 @@ def mutate_map(code : str, num_mutants : int, num_layers : int) -> Set[str]:
     ret = set()
     for mutant in mutants:
         # recurse
-        mut_depth_add = mutate_map(str(mutant), mutant_num, depth - 1) 
+        mut_depth_add = mutate_map(str(mutant), num_mutants, depth - 1) 
         
         # add result to ret
         ret.add(mutant)

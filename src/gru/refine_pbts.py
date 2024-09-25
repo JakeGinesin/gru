@@ -1,18 +1,20 @@
 import tempfile, os, subprocess, json, random, shutil, argparse
 
-from pbttools.mutator.harness import mutate_map
-from pbttools.parsing.utils import (
+from gru.mutator.harness import mutate_map
+from gru.parsing.utils import (
     extract_pbts_with_dirs_and_context,
     extract_function_defs,
-    replace_function_signatures_in_directory,
     get_all_function_names,
 )
-from pbttools.llm.prompts import (
+from gru.parsing.ast_manip import (
+    replace_function_signatures_in_directory,
+)
+from gru.llm.prompts import (
     gen_tighten_prompt_from_pbt_and_mutant,
     gen_generalize_prompt_from_pbt_and_mutant,
     extract_python_code,
 )
-from pbttools.llm.models import model
+from gru.llm.models import model
 
 
 

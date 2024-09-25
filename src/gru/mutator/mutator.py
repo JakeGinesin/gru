@@ -15,7 +15,7 @@ mut_shiftop = {"LShift", "RShift"}  # also a binop
 mut_boolop = {"And", "Or"}
 
 # ast.UnaryOp
-mut_unaryop = {"UAdd", "USub", "Not", "Invert"}
+mut_unaryop = {"UAdd", "USub", "Not", "Invert", "If"}
 
 # ast.AugAssign
 mut_augassign = {"Add", "Sub", "Mult", "Div", "FloorDiv", "Mod", "Pow",
@@ -98,7 +98,8 @@ def mutate_ast(tree : ast.AST) -> ast.AST:
     node_list = set()
 
     for node_type, nodes in collector.nodes_by_type.items():
-        if node_type in ["Compare", "BinOp", "BoolOp", "UnaryOp", "AugAssign", "Subscript", "Slice", "NameConstant", "If"]:
+        #if node_type in ["Compare", "BinOp", "BoolOp", "UnaryOp", "AugAssign", "Subscript", "Slice", "NameConstant", "If"]:
+        if node_type in ["Compare", "BinOp", "BoolOp", "UnaryOp", "AugAssign", "Subscript", "NameConstant", "If"]:
             for node in nodes : node_list.add((node_type, node))
 
     assert isinstance(collector.nodes_by_type, dict), "Expected nodes_by_type to be a dictionary"
@@ -121,8 +122,9 @@ def mutate_ast(tree : ast.AST) -> ast.AST:
                 samp = random.choice(list(mut_compare - {op}))
             elif op in mut_set_compare:
                 samp = random.choice(list(mut_set_compare - {op}))
+            elif op == "Is" : samp = op
             else:
-                pass
+                samp = op
         case "BinOp":
             op = nd['op']['type']
             if op in mut_binop:
@@ -132,25 +134,25 @@ def mutate_ast(tree : ast.AST) -> ast.AST:
             elif op in mut_shiftop:
                 samp = random.choice(list(mut_shiftop - {op}))
             else:
-                pass
+                samp = op
         case "BoolOp":
             op = nd['op']['type']
             if op in mut_boolop:
                 samp = random.choice(list(mut_boolop - {op}))
             else:
-                pass
+                samp = op
         case "UnaryOp":
             op = nd['op']['type']
             if op in mut_unaryop:
                 samp = random.choice(list(mut_unaryop - {op}))
             else:
-                pass
+                samp = op
         case "AugAssign":
             op = nd['op']['type']
             if op in mut_augassign:
                 samp = random.choice(list(mut_augassign - {op}))
             else:
-                pass
+                samp = op
         case "Subscript":
             if 'slice' in nd:
                 if isinstance(nd['slice'], dict) and 'type' in nd['slice'] and nd['slice']['type'] == 'Constant':
@@ -158,7 +160,7 @@ def mutate_ast(tree : ast.AST) -> ast.AST:
                     samp = random.choice([current_index + 1, current_index - 1, -1])
                     nd['slice']['value'] = samp
         case "Slice":
-            if not (nd['lower'] != None and nd['upper'] != None):
+            if not (nd['lower'] != None or nd['upper'] != None):
                 tmp = nd['lower']
                 nd['lower'] = nd['upper']
                 nd['upper'] = tmp
@@ -187,9 +189,13 @@ def mutate_ast(tree : ast.AST) -> ast.AST:
     elif 'ops' in nd:
         nd['ops'][0]['type'] = samp
 
-    repl = dict_to_ast(nd)
-    replacer = NodeReplacer(node, repl)
-    modified_tree = replacer.visit(tree)
+    try:
+        repl = dict_to_ast(nd)
+        replacer = NodeReplacer(node, repl)
+        modified_tree = replacer.visit(tree)
+    except Exception as e: 
+        return tree # if parsing fails, just bail
+
     return modified_tree
 
 
