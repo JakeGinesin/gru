@@ -38,7 +38,6 @@ class ChatModel:
             try:
                 response = requests.post(self.baseurl, headers=headers, json=data)
                 res = response.json()['choices'][0]['message']['content']
-                res = re.sub(r'[^\w\s,]', '', res)
                 return res
             except:
                 tries += 1

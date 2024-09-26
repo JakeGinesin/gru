@@ -1,10 +1,21 @@
 import tempfile, os, subprocess, json, random, shutil, argparse
 from gru.mutator.harness import mutate_map
 from gru.parsing.utils import *
+from tqdm import tqdm
 
 from gru.parsing.ast_manip import (
     replace_function_signatures_in_directory,
 )
+
+def find_pbts_in_repo(repo_dir : str) -> list:
+    pbts_data = extract_pbts_with_dirs_and_context(repo_dir)
+
+    ret = []
+    for pbt, data in pbts_data.items():
+        pbt_name = data[0]
+        ret.append(pbt_name)
+
+    return ret
 
 def analyze_pbts_in_repo(repo_dir : str, mutant_num : int):
 
@@ -17,7 +28,7 @@ def analyze_pbts_in_repo(repo_dir : str, mutant_num : int):
 
         results = []
 
-        for pbt, data in pbts_data.items(): 
+        for pbt, data in tqdm(pbts_data.items()): 
             pbt_name = data[0]
             dependency_names = data[1]
             pbt_definition = data[2]
@@ -38,7 +49,7 @@ def analyze_pbts_in_repo(repo_dir : str, mutant_num : int):
             env['PYTHONPATH'] = dst_dir
 
             result = subprocess.run(
-                ['pytest', '--json-report', '--json-report-file=' + report_file_path, 
+                ['pytest', '-q', '--json-report', '--json-report-file=' + report_file_path, 
                  pbt_path + "::" + pbt_name],
                 env=env,  # pass the modified environment to the subprocess
             )
@@ -79,7 +90,7 @@ def analyze_pbts_in_repo(repo_dir : str, mutant_num : int):
 
                 report_file_path = os.path.join(dst_dir, 'report.json')
                 result = subprocess.run(
-                    ['pytest', '--json-report', '--json-report-file=' + report_file_path, 
+                    ['pytest', '-q', '--json-report', '--json-report-file=' + report_file_path, 
                      pbt_path + "::" + pbt_name],
                     env=env
                 )
@@ -142,7 +153,7 @@ def analyze_pbt_in_repo(repo_dir: str, mutant_num: int, pbt_name_filter: str):
         env['PYTHONPATH'] = dst_dir
 
         result = subprocess.run(
-            ['pytest', '--json-report', '--json-report-file=' + report_file_path, 
+            ['pytest', '-q', '--json-report', '--json-report-file=' + report_file_path, 
              pbt_path + "::" + pbt_name],
             env=env,  # pass the modified environment to the subprocess
         )
@@ -174,7 +185,7 @@ def analyze_pbt_in_repo(repo_dir: str, mutant_num: int, pbt_name_filter: str):
         passed_tests = set()
         failed_tests = set()
 
-        for mutant in mutants:
+        for mutant in tqdm(mutants):
             def_nodes = extract_function_defs(mutant)
 
             replace_function_signatures_in_directory(dst_dir, def_nodes)
@@ -184,7 +195,7 @@ def analyze_pbt_in_repo(repo_dir: str, mutant_num: int, pbt_name_filter: str):
 
             report_file_path = os.path.join(dst_dir, 'report.json')
             result = subprocess.run(
-                ['pytest', '--json-report', '--json-report-file=' + report_file_path, 
+                ['pytest', '-q', '--json-report', '--json-report-file=' + report_file_path, 
                  pbt_path + "::" + pbt_name],
                 env=env
             )
@@ -231,11 +242,15 @@ def main():
         )
 
     else:
+        print("unrecognized argument")
+        sys.exit(0)
+        """
         result = analyze_pbt_in_repo(
             args.repo_dir,
             mutant_num=args.mutant_num,
             pbt_name_filter="test_parsing_spaced_ender_arrow"
         )
+        """
 
     print(result)
 

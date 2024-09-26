@@ -16,8 +16,6 @@ from gru.llm.prompts import (
 )
 from gru.llm.models import model
 
-
-
 def tighten_repo_pbt(repo_dir : str, pbt_name : str, threshhold : float = 0.8, mutant_num : int = 10, max_iters : int = 10) -> str:
     pbts_data = extract_pbts_with_dirs_and_context(repo_dir)
 
@@ -82,7 +80,6 @@ def tighten_repo_pbt(repo_dir : str, pbt_name : str, threshhold : float = 0.8, m
         failed_tests = set()
 
         for mutant in mutants:
-            print(mutant)
             def_nodes = extract_function_defs(mutant)
 
             replace_function_signatures_in_directory(dst_dir, def_nodes)
@@ -133,6 +130,9 @@ def tighten_repo_pbt(repo_dir : str, pbt_name : str, threshhold : float = 0.8, m
                 prompt = gen_tighten_prompt_from_pbt_and_mutant(dep_list, current_pbt, ref_mutant)
                 res = model.generate_full(prompt)
                 pbt_res = extract_python_code(res)
+                
+                print("NEW PBTS!!\n\n")
+                print(pbt_res)
 
                 new_pbt_name = get_all_function_names(pbt_res)[0]
 
@@ -144,7 +144,7 @@ def tighten_repo_pbt(repo_dir : str, pbt_name : str, threshhold : float = 0.8, m
                 pbt_res_ast = extract_function_defs(pbt_res)
 
                 # make sure the new pbt actually passes
-                replace_function_signatures_in_directory(dst_dir, [pbt_res_ast])
+                replace_function_signatures_in_directory(dst_dir, pbt_res_ast)
 
                 report_file_path = os.path.join(dst_dir, 'report.json')
 
@@ -162,6 +162,7 @@ def tighten_repo_pbt(repo_dir : str, pbt_name : str, threshhold : float = 0.8, m
 
                     if len(ret_data["tests"]) == 0: 
                         generate_lim-=1
+                        print("this pbt failed to compile...")
                         continue
 
                     for test in ret_data["tests"]:
@@ -169,13 +170,13 @@ def tighten_repo_pbt(repo_dir : str, pbt_name : str, threshhold : float = 0.8, m
                         outcome = test["outcome"]
                         if outcome == "failed": 
                             generate_lim-=1
+                            print("this pbt failed to pass...")
                             continue
 
                 current_pbt = pbt_res
+                replace_function_signatures_in_directory(dst_dir, op_pbt)
+                break
 
-                replace_function_signatures_in_directory(dst_dir, [op_pbt])
-
-                generate_lim-=1
 
             # if we failed to generate a new pbt based off the mutant, just skip it
             if generate_lim == 0 : continue
@@ -183,13 +184,12 @@ def tighten_repo_pbt(repo_dir : str, pbt_name : str, threshhold : float = 0.8, m
             # assess the new PBT (current_pbt) against the mutants, generate a new passed_tests and failed_tests set (based on original mutants)
 
             current_pbt_ast = extract_function_defs(current_pbt)
-            replace_function_signatures_in_directory(dst_dir, [current_pbt_ast])
+            replace_function_signatures_in_directory(dst_dir, current_pbt_ast)
 
             passed_tests = set()
             failed_tests = set()
 
             for mutant in mutants:
-                print(mutant)
                 def_nodes = extract_function_defs(mutant)
 
                 replace_function_signatures_in_directory(dst_dir, def_nodes)
@@ -215,7 +215,7 @@ def tighten_repo_pbt(repo_dir : str, pbt_name : str, threshhold : float = 0.8, m
                         elif outcome == "failed":
                             failed_tests.add(mutant)
 
-                replace_function_signatures_in_directory(dst_dir, [op_pbt])
+                replace_function_signatures_in_directory(dst_dir, op_pbt)
 
 
             # re-determine if PBT passes threshhold
@@ -289,7 +289,6 @@ def generalize_repo_pbt(repo_dir : str, pbt_name : str, threshhold : float = 0.3
         failed_tests = set()
 
         for mutant in mutants:
-            print(mutant)
             def_nodes = extract_function_defs(mutant)
 
             replace_function_signatures_in_directory(dst_dir, def_nodes)
@@ -351,7 +350,7 @@ def generalize_repo_pbt(repo_dir : str, pbt_name : str, threshhold : float = 0.3
                 pbt_res_ast = extract_function_defs(pbt_res)
 
                 # make sure the new pbt actually passes
-                replace_function_signatures_in_directory(dst_dir, [pbt_res_ast])
+                replace_function_signatures_in_directory(dst_dir, pbt_res_ast)
 
                 report_file_path = os.path.join(dst_dir, 'report.json')
 
@@ -379,10 +378,9 @@ def generalize_repo_pbt(repo_dir : str, pbt_name : str, threshhold : float = 0.3
                             continue
 
                 current_pbt = pbt_res
+                replace_function_signatures_in_directory(dst_dir, op_pbt)
+                break
 
-                replace_function_signatures_in_directory(dst_dir, [op_pbt])
-
-                generate_lim-=1
 
             # if we failed to generate a new pbt based off the mutant, just skip it
             if generate_lim == 0 : continue
@@ -390,13 +388,12 @@ def generalize_repo_pbt(repo_dir : str, pbt_name : str, threshhold : float = 0.3
             # assess the new PBT (current_pbt) against the mutants, generate a new passed_tests and failed_tests set (based on original mutants)
 
             current_pbt_ast = extract_function_defs(current_pbt)
-            replace_function_signatures_in_directory(dst_dir, [current_pbt_ast])
+            replace_function_signatures_in_directory(dst_dir, current_pbt_ast)
 
             passed_tests = set()
             failed_tests = set()
 
             for mutant in mutants:
-                print(mutant)
                 def_nodes = extract_function_defs(mutant)
 
                 replace_function_signatures_in_directory(dst_dir, def_nodes)
@@ -434,8 +431,8 @@ def generalize_repo_pbt(repo_dir : str, pbt_name : str, threshhold : float = 0.3
 
 def main():
     parser = argparse.ArgumentParser(description='Refine property-based tests.')
-    parser.add_argument('repo_dir', help='Path to the repository directory')
-    parser.add_argument('pbt_name', help='Name of the property-based test')
+    parser.add_argument('--repo_dir', help='Path to the repository directory')
+    parser.add_argument('--pbt_name', help='Name of the property-based test')
     parser.add_argument('--threshhold', type=float, default=0.8, help='Threshold value')
     parser.add_argument('--mutant_num', type=int, default=10, help='Number of mutants')
     parser.add_argument('--max_iters', type=int, default=10, help='Maximum iterations')
@@ -460,8 +457,18 @@ def main():
             max_iters=args.max_iters
         )
     else:
-        print("Unknown script")
-        sys.exit(1)
+
+        print("unrecognized argument")
+        sys.exit(0)
+        """
+        result = tighten_repo_pbt(
+            args.repo_dir,
+            args.pbt_name,
+            threshhold=args.threshhold,
+            mutant_num=args.mutant_num,
+            max_iters=args.max_iters
+        )
+        """
 
     print(result)
 
