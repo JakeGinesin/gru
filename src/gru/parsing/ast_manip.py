@@ -1,4 +1,4 @@
-from parsing.utils import extract_function_defs, extract_pbts_with_dirs_and_context
+from gru.parsing.utils import extract_function_defs, extract_pbts_with_dirs_and_context
 from typing import List, Tuple, Dict, Set
 import ast, os
 

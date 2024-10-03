@@ -2,7 +2,7 @@
 various util functions for parsing/unparsing PBTs
 """
 import ast, os, re, astor, json, sys, importlib.util, pkgutil
-from parsing.std_list import stdlib_list
+from gru.parsing.std_list import stdlib_list
 from typing import List, Tuple, Dict, Set
 
 def get_full_function_name(node: ast.AST) -> str:

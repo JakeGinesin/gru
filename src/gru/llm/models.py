@@ -2,7 +2,7 @@ import os
 import re
 import requests 
 
-class ChatModel:
+class OpenAIModel:
 
     def __init__(self, system: str, temperature=0.3):
         """Sets up the model with a system prompt and a temperature"""
@@ -44,7 +44,7 @@ class ChatModel:
         raise Exception(f"Failed to get response after {tries} tries.")
 
 # Initialize the model
-model = ChatModel(system="", temperature=0.2)
+model = OpenAIModel(system="", temperature=0.2)
 
 if __name__ == "__main__":
     model = ChatModel(system="", temperature=0.2)

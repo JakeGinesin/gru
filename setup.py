@@ -16,6 +16,7 @@ setup(
         'pytest>=6.0.0',
         'pytest-json-report>=1.2.4',
         'hypothesis>=6.0.0',
+        'astor',
         # Include other dependencies if any
     ],
     entry_points={

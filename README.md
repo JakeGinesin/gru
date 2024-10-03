@@ -115,6 +115,9 @@ This project is licensed under the MIT license.
 
 ## Wishlist
 This project is a research prototype and is under active development. Wishlist:
-- [ ] analyze one PBT at a time
+- [/] analyze one PBT at a time
 - [ ] implement the huggingface API as an alternative to openai
 - [ ] an improved mutation engine that implements [e-graphs](https://effect.systems/doc/course-projects/cornelius.pdf), coverage-guided mutant generation, multithreading, and no source code modification (via only modifying `__pycache__`)
+
+## Why the name
+I like the movie :)
