@@ -25,11 +25,12 @@ setup(
         'console_scripts': [
             #'tighten-pbt=gru.refine_pbts:tighten_repo_pbt',
             #'generalize-pbt=gru.refine_pbts:generalize_repo_pbt',
-            'tighten-pbt=gru.refine_pbts:main',
             'find-pbts=gru.refine_pbts:main',
             'generalize-pbt=gru.refine_pbts:main',
             #'analyze-pbts=gru.analyze_pbts:analyze_pbts_in_repo',
             'analyze-pbts=gru.analyze_pbts:main',
+            'analyze-pbt=gru.analyze_pbts:main',
+            'tighten-pbt=gru.refine_pbts:main',
         ],
     },
     classifiers=[
