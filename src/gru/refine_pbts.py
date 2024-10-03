@@ -47,7 +47,7 @@ def tighten_repo_pbt(repo_dir : str, pbt_name : str, threshhold : float = 0.8, m
         env['PYTHONPATH'] = dst_dir
 
         result = subprocess.run(
-            ['pytest', '--json-report', '--json-report-file=' + report_file_path, 
+            ['pytest', '-q', '--json-report', '--json-report-file=' + report_file_path, 
              pbt_path + "::" + pbt_name],
             env=env,  # pass the modified environment to the subprocess
         )
@@ -89,7 +89,7 @@ def tighten_repo_pbt(repo_dir : str, pbt_name : str, threshhold : float = 0.8, m
 
             report_file_path = os.path.join(dst_dir, 'report.json')
             result = subprocess.run(
-                ['pytest', '--json-report', '--json-report-file=' + report_file_path, 
+                ['pytest', '-q', '--json-report', '--json-report-file=' + report_file_path, 
                  pbt_path + "::" + pbt_name],
                 env=env
             )
@@ -152,7 +152,7 @@ def tighten_repo_pbt(repo_dir : str, pbt_name : str, threshhold : float = 0.8, m
                 env['PYTHONPATH'] = dst_dir
 
                 result = subprocess.run(
-                    ['pytest', '--json-report', '--json-report-file=' + report_file_path, 
+                    ['pytest', '-q', '--json-report', '--json-report-file=' + report_file_path, 
                      pbt_path + "::" + pbt_name],
                     env=env,  # pass the modified environment to the subprocess
                 )
@@ -199,7 +199,7 @@ def tighten_repo_pbt(repo_dir : str, pbt_name : str, threshhold : float = 0.8, m
 
                 report_file_path = os.path.join(dst_dir, 'report.json')
                 result = subprocess.run(
-                    ['pytest', '--json-report', '--json-report-file=' + report_file_path, 
+                    ['pytest', '-q','--json-report', '--json-report-file=' + report_file_path, 
                      pbt_path + "::" + pbt_name],
                     env=env
                 )
@@ -256,7 +256,7 @@ def generalize_repo_pbt(repo_dir : str, pbt_name : str, threshhold : float = 0.3
         env['PYTHONPATH'] = dst_dir
 
         result = subprocess.run(
-            ['pytest', '--json-report', '--json-report-file=' + report_file_path, 
+            ['pytest', '-q','--json-report', '--json-report-file=' + report_file_path, 
              pbt_path + "::" + pbt_name],
             env=env,  # pass the modified environment to the subprocess
         )
@@ -298,7 +298,7 @@ def generalize_repo_pbt(repo_dir : str, pbt_name : str, threshhold : float = 0.3
 
             report_file_path = os.path.join(dst_dir, 'report.json')
             result = subprocess.run(
-                ['pytest', '--json-report', '--json-report-file=' + report_file_path, 
+                ['pytest', '-q', '--json-report', '--json-report-file=' + report_file_path, 
                  pbt_path + "::" + pbt_name],
                 env=env
             )
@@ -358,7 +358,7 @@ def generalize_repo_pbt(repo_dir : str, pbt_name : str, threshhold : float = 0.3
                 env['PYTHONPATH'] = dst_dir
 
                 result = subprocess.run(
-                    ['pytest', '--json-report', '--json-report-file=' + report_file_path, 
+                    ['pytest','-q','--json-report', '--json-report-file=' + report_file_path, 
                      pbt_path + "::" + pbt_name],
                     env=env,  # pass the modified environment to the subprocess
                 )
@@ -403,7 +403,7 @@ def generalize_repo_pbt(repo_dir : str, pbt_name : str, threshhold : float = 0.3
 
                 report_file_path = os.path.join(dst_dir, 'report.json')
                 result = subprocess.run(
-                    ['pytest', '--json-report', '--json-report-file=' + report_file_path, 
+                    ['pytest', '-q', '--json-report', '--json-report-file=' + report_file_path, 
                      pbt_path + "::" + pbt_name],
                     env=env
                 )
