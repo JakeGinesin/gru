@@ -229,13 +229,13 @@ def main():
 
     # Directly call the function since it's the primary purpose of this script
     import sys
-    if sys.argv[0].endswith('analyze_pbts'):
+    if sys.argv[0].endswith('analyze-pbts'):
         result = analyze_pbts_in_repo(
             args.repo_dir,
             mutant_num=args.mutant_num,
         )
 
-    elif sys.argv[0].endswith('analyze_pbt'):
+    elif sys.argv[0].endswith('analyze-pbt'):
         result = analyze_pbts_in_repo(
             args.repo_dir,
             mutant_num=args.mutant_num,
