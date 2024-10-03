@@ -236,14 +236,34 @@ def main():
         )
 
     elif sys.argv[0].endswith('analyze-pbt'):
-        result = analyze_pbts_in_repo(
+        result = analyze_pbt_in_repo(
             args.repo_dir,
             mutant_num=args.mutant_num,
+            pbt_name_filter=pbt_name,
+        )
+
+    elif sys.argv[0].endswith('find-pbts'):
+        result = find_pbts_in_repo(
+            args.repo_dir,
         )
 
     else:
         print("unrecognized argument")
         sys.exit(0)
+        """
+        result = analyze_pbt_in_repo(
+            args.repo_dir,
+            mutant_num=args.mutant_num,
+            pbt_name_filter=pbt_name,
+        )
+        """
+        """
+        result = analyze_pbts_in_repo(
+            args.repo_dir,
+            mutant_num=args.mutant_num,
+        )
+        """
+        
         """
         result = analyze_pbt_in_repo(
             args.repo_dir,

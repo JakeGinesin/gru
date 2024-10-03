@@ -230,10 +230,14 @@ def extract_pbts_from_project(directory: str) -> List[Tuple[str, str]]:
                         continue
     return list(all_pbts)  # Convert set back to list if necessary
 
-def extract_pbts_from_project_with_filenames(directory: str) -> List[Tuple[str, str, str]]:
+def extract_pbts_from_project_with_filenames(directory: str, ignore_dirs : list = []) -> List[Tuple[str, str, str]]:
     """Recursively parse a directory for Python files and extract PBT functions."""
     all_pbts = set()  # Changed to a set to avoid duplicates and correctly use .add()
+    ignore_dirs = [os.path.abspath(ignore_dir) for ignore_dir in ignore_dirs]
     for root, dirs, files in os.walk(directory):
+        if any(os.path.commonpath([os.path.abspath(root), ignore_dir]) == ignore_dir for ignore_dir in ignore_dirs):
+            continue
+
         for file in files:
             if file.endswith('.py'):
                 file_path = os.path.join(root, file)
@@ -338,11 +342,11 @@ def extract_pbts_with_context(directory: str) -> List[Tuple[str, List[str], str,
 
     return full_pbt_deps
 
-def extract_pbts_with_dirs_and_context(directory: str):
+def extract_pbts_with_dirs_and_context(directory: str, ignore_dirs : list = []):
     """Extracts all PBTs from a project, then acquires the minimum amount of context, including dirs, for the PBT.
         the motivation for this function's existence is so we can find and replace modified versions of the PBT into the original project!
     """
-    pbts = extract_pbts_from_project_with_filenames(directory)
+    pbts = extract_pbts_from_project_with_filenames(directory, ignore_dirs)
 
     pbt_deps: Dict[str, Set[str]] = {}
     pbt_filenames: Dict[str, str] = {}
@@ -358,10 +362,14 @@ def extract_pbts_with_dirs_and_context(directory: str):
         pbt_deps[name] = set()
         pbt_filenames[name] = filename
 
+    ignore_dirs = [os.path.abspath(ignore_dir) for ignore_dir in ignore_dirs]
 
     # categorize all functions by what they call etc, this can probably be done more efficiently
     # through some DP-esque thing but it's ok
     for root, dirs, files in os.walk(directory):
+        if any(os.path.commonpath([os.path.abspath(root), ignore_dir]) == ignore_dir for ignore_dir in ignore_dirs):
+            continue
+
         for file in files:
             if file.endswith('.py'):
                 filenames.add(file[0:file.index(".py")])
