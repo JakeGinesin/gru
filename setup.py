@@ -17,13 +17,17 @@ setup(
         'pytest-json-report>=1.2.4',
         'hypothesis>=6.0.0',
         'astor',
+        'requests'
         # Include other dependencies if any
     ],
     entry_points={
         'console_scripts': [
-            'tighten-pbt=gru.refine_pbts:tighten_repo_pbt',
-            'generalize-pbt=gru.refine_pbts:generalize_repo_pbt',
-            'analyze-pbts=gru.analyze_pbts:analyze_pbts_in_repo',
+            #'tighten-pbt=gru.refine_pbts:tighten_repo_pbt',
+            #'generalize-pbt=gru.refine_pbts:generalize_repo_pbt',
+            'tighten-pbt=gru.refine_pbts:main',
+            'generalize-pbt=gru.refine_pbts:main',
+            #'analyze-pbts=gru.analyze_pbts:analyze_pbts_in_repo',
+            'analyze-pbts=gru.analyze_pbts:main',
         ],
     },
     classifiers=[
