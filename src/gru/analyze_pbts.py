@@ -239,7 +239,7 @@ def main():
         result = analyze_pbt_in_repo(
             args.repo_dir,
             mutant_num=args.mutant_num,
-            pbt_name_filter=pbt_name,
+            pbt_name_filter=args.pbt_name,
         )
 
     elif sys.argv[0].endswith('find-pbts'):
